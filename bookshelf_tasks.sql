@@ -48,8 +48,11 @@ ORDER by authors.name;
 
 -- 8. Книгу «Божественная комедия» автора «Данте Алигьери» одолжили почитать другу Ивану Иванову, необходимо написать один или несколько запросов которые отразят это событие в БД
 UPDATE books
-SET books.friends_id = 1
-WHERE id = 9;
+JOIN authors_books ON authors_books.books_id = books.id
+JOIN authors ON authors_books.authors_id = authors.id
+SET books.friends_id = (SELECT friends.id FROM friends WHERE friends.name = 'Иванов Иван')
+WHERE authors.name = 'Данте Алигьери' AND books.title = 'Божественная комедия'
+limit 1;
 
 -- 9. Добавить в базу книгу «Краткие ответы на большие вопросы», год издания 2020, автор «Стивен Хокинг», положить ее на полку в кабинете
 INSERT INTO books (title, year, shelves_id) 
